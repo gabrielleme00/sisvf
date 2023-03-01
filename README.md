@@ -1,6 +1,26 @@
-# Vue 3 + Vite
+# SisVF (Frontend)
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+## Como instalar e rodar
+
+### Instalação
+
+```bash
+git clone git@github.com:gabrielleme00/sisvf.git
+cd sisvf
+npm install
+```
+
+### Rodar em modo de desenvolvimento
+
+```bash
+npm run dev
+```
+
+### Compilar
+
+```bash
+npm run build
+```
 
 ## Recommended IDE Setup
 
