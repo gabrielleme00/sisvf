@@ -7,19 +7,19 @@
 ```bash
 git clone git@github.com:gabrielleme00/sisvf.git
 cd sisvf
-npm install
+yarn
 ```
 
 ### Rodar em modo de desenvolvimento
 
 ```bash
-npm run dev
+yarn dev
 ```
 
 ### Compilar
 
 ```bash
-npm run build
+yarn build
 ```
 
 ## Recommended IDE Setup
