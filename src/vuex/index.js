@@ -28,9 +28,18 @@ export default new Vuex.Store({
                 throw error
             }
         },
-        async logout({ commit }) {
-            commit('SET_USER', null)
-            commit('SET_TOKEN', null)
+        async logout({ commit, state }) {
+            try {
+                const url = '/api/Logout'
+                const body = { Sessao: state.token }
+                const response = await axios.post(url, body)
+                const { Mensagem } = response.data
+                commit('SET_USER', null)
+                commit('SET_TOKEN', null)
+                return Mensagem
+            } catch (error) {
+                throw error
+            }
         },
     },
     getters: {

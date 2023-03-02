@@ -1,3 +1,19 @@
+<template>
+  <div class="center-screen">
+    <main class="container">
+      <form @submit.prevent="submitForm">
+        <h1>SisVF</h1>
+        <label for="username">Usuário</label>
+        <input type="text" id="username" name="username" v-model="username" required>
+        <label for="password">Senha</label>
+        <input type="password" id="password" name="password" v-model="password" required>
+        <button type="submit">Login</button>
+      </form>
+      <div class="image-wrapper"></div>
+    </main>
+  </div>
+</template>
+
 <script>
 import { mapActions } from 'vuex'
 
@@ -25,29 +41,19 @@ export default {
 }
 </script>
 
-<template>
-  <main class="container">
-    <form @submit.prevent="submitForm">
-      <h1>SisVF</h1>
-      <label for="username">Usuário</label>
-      <input type="text" id="username" name="username" v-model="username" required>
-      <label for="password">Senha</label>
-      <input type="password" id="password" name="password" v-model="password" required>
-      <button type="submit">Login</button>
-    </form>
-    <div class="image-wrapper"></div>
-  </main>
-</template>
-
 <style lang="less" scoped>
 @import "node_modules/nord/src/lesscss/nord.less";
 
-.container {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
+.center-screen {
+  width: 100%;
+  height: 100vh;
+  display: flex
+}
 
-  font-family: Arial, sans-serif;
+.container {
+  width: fit-content;
+  margin: auto;
+  display: flex;
   background-color: @nord2;
   border-radius: 5px;
   color: @nord4;
@@ -87,6 +93,7 @@ form {
 h1 {
   color: @nord4;
   margin-bottom: 20px;
+  text-align: center;
 }
 
 label {
@@ -95,40 +102,5 @@ label {
   margin-bottom: 5px;
   color: @nord4;
   text-align: left;
-}
-
-input[type="text"],
-input[type="password"] {
-  box-sizing: border-box;
-  text-align: left;
-  display: block;
-  width: 100%;
-  height: 40px;
-  padding: 10px;
-  margin-bottom: 15px;
-  border: none;
-  border-radius: 5px;
-  background-color: @nord4;
-  color: @nord0;
-}
-
-button[type="submit"] {
-  background-color: @nord10;
-  color: @nord6;
-  border: none;
-  border-radius: 5px;
-  padding: 10px 20px;
-  margin-top: 20px;
-  font-size: 16px;
-  cursor: pointer;
-  width: 100%;
-  height: 40px;
-  font-weight: bold;
-  transition: all 100ms linear;
-}
-
-button[type="submit"]:hover {
-  background-color: @nord9;
-  transition: all 50ms linear;
 }
 </style>

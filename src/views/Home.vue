@@ -1,18 +1,44 @@
+<template>
+  <div class="container">
+    <Sidebar />
+    <main>
+      <Header />
+      <section class="content">
+        <h2>Dashboard</h2>
+      </section>
+    </main>
+  </div>
+</template>
+
 <script>
-import { mapState } from 'vuex'
+import { mapActions } from "vuex"
+import Sidebar from "@/components/Sidebar.vue"
+import Header from "@/components/Header.vue"
 
 export default {
-  
+  components: {
+    Sidebar,
+    Header,
+  },
 }
 </script>
-
-<template>
-    <main>
-        <h1>Dashboard</h1>
-    </main>
-</template>
 
 <style lang="less" scoped>
 @import "node_modules/nord/src/lesscss/nord.less";
 
+.container {
+  display: flex;
+  flex-direction: row;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  padding: 1rem;
+}
+
+.content {
+  padding: 2rem;
+}
 </style>
