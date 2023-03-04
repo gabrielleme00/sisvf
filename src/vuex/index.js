@@ -2,6 +2,8 @@ import Vuex from 'vuex'
 import axios from 'axios';
 import createPersistedState from "vuex-plugin-persistedstate";
 
+const MAX_AUTH_TIME_IN_MINS = 1
+
 export default new Vuex.Store({
     state: {
         user: null,
@@ -18,8 +20,7 @@ export default new Vuex.Store({
     actions: {
         async login({ commit }, credentials) {
             try {
-                const url = '/api/Login'
-                const response = await axios.post(url, credentials)
+                const response = await axios.post('/api/Login', credentials)
                 const { Nome, Sessao } = response.data
                 commit('SET_USER', Nome)
                 commit('SET_TOKEN', Sessao)
@@ -30,13 +31,21 @@ export default new Vuex.Store({
         },
         async logout({ commit, state }) {
             try {
-                const url = '/api/Logout'
                 const body = { Sessao: state.token }
-                const response = await axios.post(url, body)
+                const response = await axios.post('/api/Logout', body)
                 const { Mensagem } = response.data
                 commit('SET_USER', null)
                 commit('SET_TOKEN', null)
                 return Mensagem
+            } catch (error) {
+                throw error
+            }
+        },
+        async listPermission({ state }) {
+            try {
+                const body = { Sessao: state.token }
+                const response = await axios.get('/api/ListPermission', { data: body })
+                return response.data
             } catch (error) {
                 throw error
             }

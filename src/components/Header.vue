@@ -1,8 +1,8 @@
 <template>
   <header>
-    <ul class="user-actions">
-      <li class="user-action">
-        <button @click="handleLogout">
+    <ul class="header-items">
+      <li class="header-item">
+        <button title="Sair" @click="handleLogout">
           <font-awesome-icon icon="fa-solid fa-right-from-bracket" size="lg" />
         </button>
       </li>
@@ -37,27 +37,28 @@ header {
   height: fit-content;
   display: flex;
   flex-direction: row;
+}
 
-  .user-actions {
-    display: flex;
-    flex-direction: row;
-    flex-grow: 1;
-    justify-content: end;
+.header-items {
+  display: flex;
+  flex-direction: row;
+  flex-grow: 1;
+  justify-content: end;
+  margin: 0;
+}
 
+.header-item {
+  list-style-type: none;
+  display: flex;
+  align-items: center;
+
+  button {
     margin: 0;
-
-    .user-action {
-      list-style-type: none;
-
-      button {
-        margin: 0;
-        height: 100%;
-        background-color: @nord11;
-        width: 60px;
-        height: 60px;
-        border-radius: 50%;
-      }
-    }
+    height: 100%;
+    background-color: @nord11;
+    width: 60px;
+    height: 60px;
+    border-radius: 10px;
   }
 }
 </style>

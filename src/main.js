@@ -10,9 +10,24 @@ import App from './App.vue'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { faRightFromBracket } from '@fortawesome/free-solid-svg-icons'
-
-library.add(faRightFromBracket)
+import {
+    faRightFromBracket,
+    faListCheck,
+    faUser,
+    faUsers,
+    faMap,
+    faCity,
+    faBriefcase,
+} from '@fortawesome/free-solid-svg-icons'
+library.add([
+    faRightFromBracket,
+    faListCheck,
+    faUser,
+    faUsers,
+    faMap,
+    faCity,
+    faBriefcase,
+])
 
 createApp(App)
     .use(router)
