@@ -22,15 +22,15 @@ export default {
 @import "node_modules/nord/src/lesscss/nord.less";
 
 .sidebar {
-  min-width: 360px;
-  width: 360px;
+  min-width: 300px;
+  width: 300px;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   color: @nord4;
   background-color: @nord1;
   box-shadow: 0px 0px 10px 5px rgba(0, 0, 0, 0.2);
-  padding-left: 4rem;
+  padding-left: 2rem;
 }
 
 .logo {
