@@ -1,5 +1,5 @@
 <template>
-  <h2>Cargos</h2>
+  <h2>Base Cargo</h2>
   <Crud table="BaseCargo" :headers="headers" />
 </template>
 

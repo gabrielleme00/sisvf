@@ -1,5 +1,5 @@
 <template>
-  <h2>Base Finalidade Checklist</h2>
+  <h2>Base Grupo Checklist</h2>
   <Crud table="BaseGrupoChecklist" :headers="headers" />
 </template>
 

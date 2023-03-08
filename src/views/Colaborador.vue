@@ -1,5 +1,5 @@
 <template>
-  <h2>Colaboradores</h2>
+  <h2>Colaborador</h2>
   <Crud table="Colaborador" :headers="headers" />
 </template>
 
