@@ -12,7 +12,7 @@
 
 <script>
 import { mapActions } from "vuex"
-import Sidebar from "@/components/Sidebar.vue"
+import Sidebar from "@/components/Sidebar/Component.vue"
 import Header from "@/components/Header.vue"
 
 export default {
@@ -26,10 +26,10 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['listPermission']),
+    ...mapActions(['fetchTable']),
     async getPermissions() {
       try {
-        await this.listPermission()
+        await this.fetchTable('ListPermission')
       } catch (error) {
         const msg = error.response.data.error
         alert(msg)

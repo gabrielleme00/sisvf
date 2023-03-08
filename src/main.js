@@ -18,6 +18,16 @@ import {
     faMap,
     faCity,
     faBriefcase,
+    faCheck,
+    faXmark,
+    faPenToSquare,
+    faTrash,
+    faCaretDown,
+    faCaretRight,
+    faBuilding,
+    faDatabase,
+    faBullseye,
+    faCircleCheck,
 } from '@fortawesome/free-solid-svg-icons'
 library.add([
     faRightFromBracket,
@@ -27,6 +37,16 @@ library.add([
     faMap,
     faCity,
     faBriefcase,
+    faCheck,
+    faXmark,
+    faPenToSquare,
+    faTrash,
+    faCaretDown,
+    faCaretRight,
+    faBuilding,
+    faDatabase,
+    faBullseye,
+    faCircleCheck,
 ])
 
 createApp(App)

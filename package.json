@@ -19,6 +19,7 @@
     "nord": "^0.2.1",
     "vue": "^3.2.45",
     "vue-router": "^4.1.6",
+    "vuetable-2": "^2.0.0-beta.4",
     "vuex": "^4.1.0",
     "vuex-plugin-persistedstate": "^1.0.6"
   },

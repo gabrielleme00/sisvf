@@ -1,0 +1,24 @@
+<template>
+  <h2>Cargos</h2>
+  <Crud table="BaseCargo" :headers="headers" />
+</template>
+
+<script>
+import Crud from "@/components/Crud.vue"
+
+export default {
+  components: {
+    Crud,
+  },
+  data() {
+    return {
+      headers: [
+        { key: "ativo", text: "Ativo" },
+        { key: "descricao", text: "Descrição" },
+        { key: "titular", text: "Titular" },
+        { key: "criadoem", text: "Criado Em", format: "date" },
+      ],
+    }
+  },
+}
+</script>
