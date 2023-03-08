@@ -13,7 +13,7 @@
         >
           {{ header.text || header.key }}
         </th>
-        <th>Ações</th>
+        <th class="actions">Ações</th>
       </tr>
     </thead>
     <tbody>
@@ -92,10 +92,12 @@ export default {
   },
   methods: {
     handleEdit() {
-      alert('Editar')
+      alert("Editar")
     },
     handleDelete() {
-      alert('A função de excluir está desativada. Em vez disso, desative o item.')
+      alert(
+        "A função de excluir está desativada. Em vez disso, desative o item."
+      )
     },
     sortBy(headerKey) {
       if (this.sortedBy === headerKey) {
@@ -141,6 +143,8 @@ td {
 }
 
 td.actions {
+  min-width: 60px;
+
   .action {
     cursor: pointer;
 
@@ -167,16 +171,20 @@ th:hover {
   background-color: @nord2;
 }
 
-th.sorted-asc::after {
-  position: fixed;
+th:not(.actions)::after {
   content: "▲";
   margin-left: 8px;
+  opacity: 0.1;
+}
+
+th.sorted-asc::after {
+  content: "▲";
+  opacity: 1;
 }
 
 th.sorted-desc::after {
-  position: fixed;
   content: "▼";
-  margin-left: 8px;
+  opacity: 1;
 }
 
 tbody tr:nth-child(even) {
