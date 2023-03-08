@@ -1,5 +1,5 @@
 <template>
-  <router-link v-if="!data.children" class="menu-item" :to="data.url">
+  <router-link v-if="!data.children" class="menu-item" :to="data.url" active-class="active">
     <font-awesome-icon
       v-if="data.icon"
       :icon="data.icon"
@@ -32,7 +32,7 @@
 
 <script>
 export default {
-  name: 'MenuItem',
+  name: "MenuItem",
   props: {
     data: {
       type: Object,
@@ -58,22 +58,30 @@ li {
   overflow-y: auto;
 }
 
-.text {
-  user-select: none;
+.active {
+    background-color: @nord2;
 }
 
-.menu-item {
+.menu-item,
+.folder {
   cursor: pointer;
   display: block;
   height: 100%;
-  padding: 10px 0 10px 1rem;
   margin-left: 10px;
+  padding: 10px 0 10px 1rem;
+
+  .text {
+    user-select: none;
+  }
+}
+
+.menu-item {
   color: @nord4;
   font-weight: 400;
   border-left: 1px solid @nord3;
 
   &:hover {
-    background-color: @nord2;
+    background-color: @nord3;
   }
 
   &-icon {
@@ -85,10 +93,6 @@ li {
 }
 
 .folder {
-  cursor: pointer;
-  display: block;
-  height: 100%;
-  padding: 12px 0 12px 1rem;
   color: @nord6;
   font-weight: 700;
 
