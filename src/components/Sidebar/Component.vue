@@ -11,7 +11,7 @@
 import Menu from "./Menu.vue"
 
 export default {
-  name: 'Sidebar',
+  name: "Sidebar",
   components: {
     Menu,
   },
@@ -31,6 +31,11 @@ export default {
   background-color: @nord1;
   box-shadow: 0px 0px 10px 5px rgba(0, 0, 0, 0.2);
   padding-left: 2rem;
+}
+
+.sidebar > a {
+  margin-right: 2rem;
+  border-bottom: 1px solid @nord0;
 }
 
 .logo {

@@ -1,5 +1,10 @@
 <template>
-  <router-link v-if="!data.children" class="menu-item" :to="data.url" active-class="active">
+  <router-link
+    v-if="!data.children"
+    class="menu-item"
+    :to="data.url"
+    active-class="active"
+  >
     <font-awesome-icon
       v-if="data.icon"
       :icon="data.icon"
@@ -59,12 +64,11 @@ li {
 }
 
 .active {
-    background-color: @nord2;
+  background-color: @nord2;
 }
 
 .menu-item,
 .folder {
-  cursor: pointer;
   display: block;
   height: 100%;
   margin-left: 10px;
@@ -73,6 +77,11 @@ li {
   .text {
     user-select: none;
   }
+}
+
+.menu-item,
+.folder-link {
+  cursor: pointer;
 }
 
 .menu-item {

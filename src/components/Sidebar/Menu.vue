@@ -75,6 +75,8 @@ export default {
 </script>
 
 <style lang="less" scoped>
+@import "node_modules/nord/src/lesscss/nord.less";
+
 ul {
   padding-left: 0;
 
