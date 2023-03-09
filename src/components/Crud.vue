@@ -9,14 +9,14 @@
       Atualizar
     </button>
   </section>
-  <modal :show="modalOpen" :close="closeModal">
-    <h1>Modal Content</h1>
+  <modal :show="isModalOpen" :close="closeModal">
+    {{ itemToEdit }}
   </modal>
   <DataTable
     v-if="content.length"
     :data="content"
     :headers="headers"
-    :handleEdit="handleEdit"
+    :handleEdit="openModal"
   />
   <p v-else>Carregando, por favor aguarde...</p>
 </template>
@@ -40,7 +40,8 @@ export default {
   data() {
     return {
       content: { type: Array, default: [] },
-      modalOpen: false,
+      isModalOpen: false,
+      itemToEdit: null,
     }
   },
   methods: {
@@ -57,16 +58,14 @@ export default {
         }
       }
     },
-    openModal() {
-      this.modalOpen = true
+    openModal(item) {
+      this.itemToEdit = item
+      this.isModalOpen = true
     },
     closeModal() {
-      this.modalOpen = false
+      this.isModalOpen = false
+      this.itemToEdit = null
     },
-    handleEdit(item) {
-      this.openModal()
-      console.log(item)
-    }
   },
   async created() {
     await this.getContent()
