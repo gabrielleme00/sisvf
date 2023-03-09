@@ -13,7 +13,7 @@ export default {
   data() {
     return {
       headers: [
-        { key: "ativo", text: "Ativo" },
+        { key: "ativo", text: "Ativo", bool: true },
         { key: "descricao", text: "Descrição" },
         { key: "basedepartamento", text: "Base Departamento" },
         { key: "ordem", text: "Ordem" },

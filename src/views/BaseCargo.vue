@@ -13,7 +13,8 @@ export default {
   data() {
     return {
       headers: [
-        { key: "ativo", text: "Ativo" },
+        { key: "idBaseCargo", hidden: true },
+        { key: "ativo", text: "Ativo", bool: true },
         { key: "descricao", text: "Descrição" },
         { key: "titular", text: "Titular" },
         { key: "criadoem", text: "Criado Em", format: "date" },

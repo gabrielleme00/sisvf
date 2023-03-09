@@ -14,7 +14,7 @@ export default {
   data() {
     return {
       headers: [
-        { key: "ativo", text: "Ativo" },
+        { key: "ativo", text: "Ativo", bool: true  },
         { key: "nome", text: "Nome" },
         { key: "formacao", text: "Formação" },
         { key: "permissao", text: "Permissão" },
