@@ -3,13 +3,14 @@
     <thead>
       <tr>
         <th
-          v-for="(header, index) in visibleHeaders"
+          v-for="(header, index) in headers"
+          v-show="!header.hidden"
           :key="index"
-          @click="sortBy(header.key)"
           :class="{
             'sorted-asc': sortedBy === header.key && sortOrder === 1,
             'sorted-desc': sortedBy === header.key && sortOrder === -1,
           }"
+          @click="sortBy(header.key)"
         >
           {{ header.text || header.key }}
         </th>
@@ -18,7 +19,7 @@
     </thead>
     <tbody>
       <tr v-for="(item, index) in sortedData" :key="index">
-        <td v-for="(field, key) in item" :key="key">
+        <td v-for="(field, key) in item" :key="key" v-show="!field.hidden">
           <template v-if="field.bool">
             <font-awesome-icon :icon="getBoolIcon(field.value)" />
           </template>
@@ -63,35 +64,32 @@ export default {
     }
   },
   computed: {
-    visibleHeaders() {
-      return this.headers.filter(header => !header.hidden)
-    },
-    formattedData() {
+    rawData() {
       const data = toRaw(this.data)
       if (!data || !data.length) return data
-      return data.map(item => {
+    },
+    formattedData() {
+      return this.rawData.map(item => {
         const newItem = {}
-        this.visibleHeaders.forEach(header => {
+        this.headers.forEach(header => {
           const { key, format } = header
           newItem[key] = {
+            ...header,
             value: item[key],
             formattedValue: format ? this.formatValue(item[key], format) : null,
-            ...header,
           }
         })
         return newItem
       })
     },
     sortedData() {
-      if (!this.sortedBy) return this.formattedData
-      return this.formattedData.sort((a, b) => {
-        const aVal = this.getFieldValue(a[this.sortedBy])
-        const bVal = this.getFieldValue(b[this.sortedBy])
-        if (aVal > bVal) {
-          return this.sortOrder
-        } else if (aVal < bVal) {
-          return -this.sortOrder
-        }
+      const { sortedBy, sortOrder, formattedData, getFieldValue } = this
+      if (!sortedBy) return formattedData
+      return formattedData.sort((a, b) => {
+        const aVal = getFieldValue(a[sortedBy])
+        const bVal = getFieldValue(b[sortedBy])
+        if (aVal > bVal) return sortOrder
+        else if (aVal < bVal) return -sortOrder
         return 0
       })
     },
