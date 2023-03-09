@@ -3,7 +3,7 @@
     <thead>
       <tr>
         <th
-          v-for="(header, index) in headers"
+          v-for="(header, index) in visibleHeaders"
           :key="index"
           @click="sortBy(header.key)"
           :class="{
@@ -18,14 +18,12 @@
     </thead>
     <tbody>
       <tr v-for="(item, index) in sortedData" :key="index">
-        <td v-for="(value, key) in item" :key="key">
-          <template v-if="key === 'ativo'">
-            <font-awesome-icon
-              :icon="`fa-solid ${value ? 'fa-check' : 'fa-xmark'}`"
-            />
+        <td v-for="(field, key) in item" :key="key">
+          <template v-if="field.bool">
+            <font-awesome-icon :icon="getBoolIcon(field.value)" />
           </template>
           <template v-else>
-            {{ value }}
+            {{ getFieldValue(field) }}
           </template>
         </td>
         <td class="actions">
@@ -34,7 +32,7 @@
             icon="fa-solid fa-pen-to-square"
             size="lg"
             title="Editar"
-            @click="handleEdit"
+            @click="handleEdit(item)"
           />
           <font-awesome-icon
             class="action action-delete"
@@ -56,6 +54,7 @@ export default {
   props: {
     data: { type: Array, required: true, default: [] },
     headers: { type: Array, required: true, default: [] },
+    handleEdit: { type: Function, default: () => {} },
   },
   data() {
     return {
@@ -64,14 +63,21 @@ export default {
     }
   },
   computed: {
+    visibleHeaders() {
+      return this.headers.filter(header => !header.hidden)
+    },
     formattedData() {
       const data = toRaw(this.data)
       if (!data || !data.length) return data
       return data.map(item => {
         const newItem = {}
-        this.headers.forEach(header => {
+        this.visibleHeaders.forEach(header => {
           const { key, format } = header
-          newItem[key] = this.formatValue(item[key], format)
+          newItem[key] = {
+            value: item[key],
+            formattedValue: format ? this.formatValue(item[key], format) : null,
+            ...header,
+          }
         })
         return newItem
       })
@@ -79,8 +85,8 @@ export default {
     sortedData() {
       if (!this.sortedBy) return this.formattedData
       return this.formattedData.sort((a, b) => {
-        const aVal = a[this.sortedBy]
-        const bVal = b[this.sortedBy]
+        const aVal = this.getFieldValue(a[this.sortedBy])
+        const bVal = this.getFieldValue(b[this.sortedBy])
         if (aVal > bVal) {
           return this.sortOrder
         } else if (aVal < bVal) {
@@ -91,8 +97,12 @@ export default {
     },
   },
   methods: {
-    handleEdit() {
-      alert("Editar")
+    getBoolIcon(value) {
+      return value ? "fa-solid fa-check" : "fa-solid fa-xmark"
+    },
+    getFieldValue(field) {
+      const { value, formattedValue } = field
+      return formattedValue ? formattedValue : value
     },
     handleDelete() {
       alert(
