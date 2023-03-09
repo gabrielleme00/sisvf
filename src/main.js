@@ -31,6 +31,8 @@ import {
   faAddressCard,
   faTableList,
   faFileLines,
+  faPlus,
+  faRotateRight,
 } from "@fortawesome/free-solid-svg-icons"
 library.add([
   faRightFromBracket,
@@ -53,6 +55,8 @@ library.add([
   faAddressCard,
   faTableList,
   faFileLines,
+  faPlus,
+  faRotateRight,
 ])
 
 createApp(App)
