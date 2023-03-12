@@ -1,7 +1,15 @@
 <template>
   <transition>
-    <div class="modal" v-if="show">
+    <div class="modal" v-if="show" @click="handleClickOutside">
       <div class="modal-content">
+        <div class="modal-header">
+          <font-awesome-icon
+            icon="fa-solid fa-xmark"
+            size="lg"
+            class="modal-close-icon"
+            @click="close"
+          />
+        </div>
         <slot></slot>
         <button @click="close">Close</button>
       </div>
@@ -15,11 +23,18 @@ export default {
     show: { type: Boolean, default: false },
     close: { type: Function, default: () => {} },
   },
+  methods: {
+    handleClickOutside(event) {
+      const isOutside = !event.target.className.includes("modal-content")
+      if (isOutside) this.close()
+    },
+  },
 }
 </script>
 
 <style lang="less" scoped>
 @import "node_modules/nord/src/lesscss/nord.less";
+@import "@/style.less";
 
 .modal {
   z-index: 1;
@@ -35,11 +50,25 @@ export default {
 }
 
 .modal-content {
+  display: flex;
+  flex-direction: column;
   background-color: @nord1;
   box-shadow: 0px 0px 10px 5px rgba(0, 0, 0, 0.2);
   padding: 1rem;
   width: 80%;
   height: 80%;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.modal-close-icon {
+  cursor: pointer;
+  &:hover {
+    opacity: @btn-hover-opacity;
+  }
 }
 
 /* Transition */

@@ -1,16 +1,16 @@
 import { createRouter, createWebHistory } from "vue-router"
 import store from "@/vuex"
 
-import Login from "@/pages/Login.vue"
-import Dashboard from "@/pages/Dashboard.vue"
-import Home from "@/pages/Home.vue"
+import Login from "@pages/Login.vue"
+import Dashboard from "@pages/Dashboard.vue"
+import Home from "@pages/Home.vue"
 
-import Colaborador from "@/views/Colaborador.vue"
-import BaseCargo from "@/views/BaseCargo.vue"
-import BaseDepartamento from "@/views/BaseDepartamento.vue"
-import BaseItemChecklist from "@/views/BaseItemChecklist.vue"
-import BaseFinalidadeChecklist from "@/views/BaseFinalidadeChecklist.vue"
-import BaseGrupoChecklist from "@/views/BaseGrupoChecklist.vue"
+import Colaborador from "@views/Colaborador.vue"
+import BaseCargo from "@views/BaseCargo.vue"
+import BaseDepartamento from "@views/BaseDepartamento.vue"
+import BaseItemChecklist from "@views/BaseItemChecklist.vue"
+import BaseFinalidadeChecklist from "@views/BaseFinalidadeChecklist.vue"
+import BaseGrupoChecklist from "@views/BaseGrupoChecklist.vue"
 
 const routes = [
   { path: "/", redirect: "/dashboard" },

@@ -5,7 +5,7 @@
 
 <script>
 import { mapActions } from "vuex"
-import Crud from "@/components/Crud.vue"
+import Crud from "@components/Crud.vue"
 
 export default {
   components: {

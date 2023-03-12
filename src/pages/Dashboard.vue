@@ -12,8 +12,8 @@
 
 <script>
 import { mapActions } from "vuex"
-import Sidebar from "@/components/Sidebar/Component.vue"
-import Header from "@/components/Header.vue"
+import Sidebar from "@components/Sidebar/Component.vue"
+import Header from "@components/Header.vue"
 
 export default {
   components: {

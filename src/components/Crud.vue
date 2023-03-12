@@ -23,7 +23,7 @@
 
 <script>
 import { mapActions } from "vuex"
-import DataTable from "@/components/DataTable.vue"
+import DataTable from "@components/DataTable.vue"
 import Modal from "./Modal.vue"
 
 const MSG_SESSION_EXPIRED = "Sua sessão expirou! Realize o login novamente."
