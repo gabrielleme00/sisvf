@@ -2,7 +2,7 @@
   <div class="center-screen">
     <main class="container">
       <form @submit.prevent="submitForm">
-        <h1>SisVF</h1>
+        <h1>CCB SisVF</h1>
         <label for="username">Usuário</label>
         <input type="text" id="username" name="username" v-model="username" required>
         <label for="password">Senha</label>

@@ -1,7 +1,7 @@
 <template>
   <aside class="sidebar">
     <router-link to="/dashboard">
-      <h1 class="logo">SisVF - CCB</h1>
+      <h1 class="logo">CCB SisVF</h1>
     </router-link>
     <Menu />
   </aside>
