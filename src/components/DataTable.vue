@@ -53,7 +53,7 @@ import { toRaw } from "vue"
 
 export default {
   props: {
-    data: { type: Array, required: true, default: [] },
+    content: { type: Array, required: true, default: [] },
     headers: { type: Array, required: true, default: [] },
     handleEdit: { type: Function, default: () => {} },
   },
@@ -64,12 +64,8 @@ export default {
     }
   },
   computed: {
-    rawData() {
-      const data = toRaw(this.data)
-      if (!data || !data.length) return data
-    },
     formattedData() {
-      return this.rawData.map(item => {
+      return toRaw(this.content).map(item => {
         const newItem = {}
         this.headers.forEach(header => {
           const { key, format } = header

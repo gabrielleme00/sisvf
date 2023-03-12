@@ -14,10 +14,10 @@
   </modal>
   <DataTable
     v-if="content.length"
-    :data="content"
+    :content="content"
     :headers="headers"
     :handleEdit="openModal"
-  />
+   />
   <p v-else>Carregando, por favor aguarde...</p>
 </template>
 
