@@ -4,9 +4,9 @@
       <form @submit.prevent="submitForm">
         <h1>CCB SisVF</h1>
         <label for="username">Usuário</label>
-        <input type="text" id="username" name="username" v-model="username" required>
+        <input type="text" class="form-control" id="username" name="username" v-model="username" required>
         <label for="password">Senha</label>
-        <input type="password" id="password" name="password" v-model="password" required>
+        <input type="password" class="form-control" id="password" name="password" v-model="password" required>
         <button type="submit">Login</button>
       </form>
       <div class="image-wrapper"></div>
@@ -67,6 +67,10 @@ form {
   padding: 60px;
   width: 300px;
   height: 500px;
+}
+
+input {
+  margin-bottom: 15px;
 }
 
 .image-wrapper {

@@ -1,10 +1,18 @@
 <template>
   <h2>Base Cargo</h2>
-  <Crud table="BaseCargo" :headers="headers" />
+  <Crud :table="table" :headers="headers" />
 </template>
 
 <script>
 import Crud from "@components/Crud.vue"
+
+const headers = [
+  { key: "idBaseCargo", title: "ID", hidden: true, readonly: true },
+  { key: "ativo", title: "Ativo", type: "checkbox" },
+  { key: "descricao", title: "Descrição" },
+  { key: "titular", title: "Titular", type: "number" },
+  { key: "criadoem", title: "Criado Em", format: "date", readonly: true },
+]
 
 export default {
   components: {
@@ -12,13 +20,8 @@ export default {
   },
   data() {
     return {
-      headers: [
-        { key: "idBaseCargo", hidden: true },
-        { key: "ativo", text: "Ativo", bool: true },
-        { key: "descricao", text: "Descrição" },
-        { key: "titular", text: "Titular" },
-        { key: "criadoem", text: "Criado Em", format: "date" },
-      ],
+      table: "BaseCargo",
+      headers,
     }
   },
 }

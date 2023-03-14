@@ -22,6 +22,7 @@ import {
   faUser,
   faUsers,
   faXmark,
+  faXmarkCircle,
 } from "@fortawesome/free-solid-svg-icons"
 library.add([
   faAddressCard,
@@ -46,6 +47,7 @@ library.add([
   faUser,
   faUsers,
   faXmark,
+  faXmarkCircle,
 ])
 
 export { library }

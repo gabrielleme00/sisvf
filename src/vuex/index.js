@@ -48,6 +48,16 @@ export default new Vuex.Store({
         throw error
       }
     },
+    async editTable({ state }, { endpoint, data }) {
+      try {
+        const response = await axios.put(`/api/${endpoint}`, data, {
+          headers: { Sessao: state.token, "Content-Type": "application/json" },
+        })
+        return response.data
+      } catch (error) {
+        throw error
+      }
+    },
   },
   getters: {
     isAuthenticated(state) {

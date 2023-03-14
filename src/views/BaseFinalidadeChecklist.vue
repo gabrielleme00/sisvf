@@ -1,10 +1,23 @@
 <template>
   <h2>Base Finalidade Checklist</h2>
-  <Crud table="BaseFinalidadeChecklist" :headers="headers" />
+  <Crud :table="table" :headers="headers" />
 </template>
 
 <script>
 import Crud from "@components/Crud.vue"
+
+const headers = [
+  {
+    key: "idBaseFinalidadeChecklist",
+    title: "ID",
+    hidden: true,
+    readonly: true,
+  },
+  { key: "ativo", title: "Ativo", type: "checkbox" },
+  { key: "descricao", title: "Descrição" },
+  { key: "basedepartamento", title: "Base Departamento" },
+  { key: "ordem", title: "Ordem" },
+]
 
 export default {
   components: {
@@ -12,12 +25,8 @@ export default {
   },
   data() {
     return {
-      headers: [
-        { key: "ativo", text: "Ativo", bool: true },
-        { key: "descricao", text: "Descrição" },
-        { key: "basedepartamento", text: "Base Departamento" },
-        { key: "ordem", text: "Ordem" },
-      ],
+      table: "BaseFinalidadeChecklist",
+      headers,
     }
   },
 }

@@ -58,6 +58,6 @@ main {
 }
 
 .content {
-  padding: 2rem;
+  padding: 0 2rem;
 }
 </style>

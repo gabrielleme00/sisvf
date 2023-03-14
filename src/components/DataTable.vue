@@ -12,7 +12,7 @@
           }"
           @click="sortBy(header.key)"
         >
-          {{ header.text || header.key }}
+          {{ header.title || header.key }}
         </th>
         <th class="actions">Ações</th>
       </tr>
@@ -20,8 +20,8 @@
     <tbody>
       <tr v-for="(item, index) in sortedData" :key="index">
         <td v-for="(field, key) in item" :key="key" v-show="!field.hidden">
-          <template v-if="field.bool">
-            <font-awesome-icon :icon="getBoolIcon(field.value)" />
+          <template v-if="field.type === 'checkbox'">
+            <font-awesome-icon :icon="getCheckboxIcon(field.value)" />
           </template>
           <template v-else>
             {{ getFieldValue(field) }}
@@ -91,7 +91,7 @@ export default {
     },
   },
   methods: {
-    getBoolIcon(value) {
+    getCheckboxIcon(value) {
       return value ? "fa-solid fa-check" : "fa-solid fa-xmark"
     },
     getFieldValue(field) {

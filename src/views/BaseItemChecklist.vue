@@ -1,10 +1,18 @@
 <template>
   <h2>Base Item Checklist</h2>
-  <Crud table="BaseItemChecklist" :headers="headers" />
+  <Crud :table="table" :headers="headers" />
 </template>
 
 <script>
 import Crud from "@components/Crud.vue"
+
+const headers = [
+  { key: "idBaseItemChecklist", title: "ID", hidden: true, readonly: true },
+  { key: "ativo", title: "Ativo", type: "checkbox" },
+  { key: "descricao", title: "Descrição" },
+  { key: "ordem", title: "Ordem" },
+  { key: "criadoem", title: "Criado Em", format: "date" },
+]
 
 export default {
   components: {
@@ -12,12 +20,8 @@ export default {
   },
   data() {
     return {
-      headers: [
-        { key: "ativo", text: "Ativo", bool: true  },
-        { key: "descricao", text: "Descrição" },
-        { key: "ordem", text: "Ordem" },
-        { key: "criadoem", text: "Criado Em", format: "date" },
-      ],
+      table: "BaseItemChecklist",
+      headers,
     }
   },
 }

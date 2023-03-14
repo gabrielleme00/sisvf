@@ -3,15 +3,15 @@
     <div class="modal" v-if="show" @click="handleClickOutside">
       <div class="modal-content">
         <div class="modal-header">
+          <h2 class="modal-title">{{ title }}</h2>
           <font-awesome-icon
-            icon="fa-solid fa-xmark"
-            size="lg"
+            icon="fa-solid fa-xmark-circle"
+            size="xl"
             class="modal-close-icon"
             @click="close"
           />
         </div>
         <slot></slot>
-        <button @click="close">Close</button>
       </div>
     </div>
   </transition>
@@ -20,12 +20,13 @@
 <script>
 export default {
   props: {
+    title: { type: String, default: '' },
     show: { type: Boolean, default: false },
     close: { type: Function, default: () => {} },
   },
   methods: {
     handleClickOutside(event) {
-      const isOutside = !event.target.className.includes("modal-content")
+      const isOutside = event.target.className === 'modal'
       if (isOutside) this.close()
     },
   },
@@ -55,16 +56,20 @@ export default {
   background-color: @nord1;
   box-shadow: 0px 0px 10px 5px rgba(0, 0, 0, 0.2);
   padding: 1rem;
-  width: 80%;
+  width: 50%;
   height: 80%;
+  overflow: hidden;
+  overflow-y: auto;
 }
 
 .modal-header {
   display: flex;
-  justify-content: flex-end;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
 .modal-close-icon {
+  color: @nord4;
   cursor: pointer;
   &:hover {
     opacity: @btn-hover-opacity;

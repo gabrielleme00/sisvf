@@ -1,11 +1,22 @@
 <template>
   <h2>Colaborador</h2>
-  <Crud table="Colaborador" :headers="headers" />
+  <Crud :table="table" :headers="headers" />
 </template>
 
 <script>
 import { mapActions } from "vuex"
 import Crud from "@components/Crud.vue"
+
+const headers = [
+  { key: "idColaborador", title: "ID", hidden: true, readonly: true },
+  { key: "ativo", title: "Ativo", type: "checkbox" },
+  { key: "nome", title: "Nome" },
+  { key: "login", title: "Login" },
+  { key: "formacao", title: "Formação" },
+  { key: "permissao", title: "Permissão", readonly: true, },
+  { key: "criadoem", title: "Criado Em", format: "date" },
+  { key: "ultimoAcesso", title: "Último Acesso", format: "datetime" },
+]
 
 export default {
   components: {
@@ -13,14 +24,8 @@ export default {
   },
   data() {
     return {
-      headers: [
-        { key: "ativo", text: "Ativo", bool: true  },
-        { key: "nome", text: "Nome" },
-        { key: "formacao", text: "Formação" },
-        { key: "permissao", text: "Permissão" },
-        { key: "criadoem", text: "Criado Em", format: "date" },
-        { key: "ultimoAcesso", text: "Último Acesso", format: "datetime" },
-      ],
+      table: "Colaborador",
+      headers,
     }
   },
 }
