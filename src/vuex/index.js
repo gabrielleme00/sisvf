@@ -41,16 +41,27 @@ export default new Vuex.Store({
     },
     async fetchTable({ state }, endpoint) {
       try {
-        const config = { headers: { Sessao: state.token } }
-        const response = await axios.get(`/api/${endpoint}`, config)
+        const response = await axios.get(`/api/${endpoint}`, {
+          headers: { Sessao: state.token, "Content-Type": "application/json" },
+        })
         return response.data
       } catch (error) {
         throw error
       }
     },
-    async editTable({ state }, { endpoint, data }) {
+    async editRecord({ state }, { endpoint, data }) {
       try {
         const response = await axios.put(`/api/${endpoint}`, data, {
+          headers: { Sessao: state.token, "Content-Type": "application/json" },
+        })
+        return response.data
+      } catch (error) {
+        throw error
+      }
+    },
+    async addRecord({ state }, { endpoint, data }) {
+      try {
+        const response = await axios.post(`/api/${endpoint}`, data, {
           headers: { Sessao: state.token, "Content-Type": "application/json" },
         })
         return response.data

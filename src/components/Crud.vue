@@ -1,6 +1,6 @@
 <template>
   <section class="table-actions">
-    <button @click="openModal">
+    <button @click="startAdd">
       <font-awesome-icon icon="fa-solid fa-plus" />
       Adicionar
     </button>
@@ -9,12 +9,12 @@
       Atualizar
     </button>
   </section>
-  <modal :show="isModalOpen" :close="cancelEdit" title="Editar">
+  <modal :show="isModalOpen" :close="closeModal" :title="modalTitle">
     <div
-      v-for="(item, key) in recordToEdit"
+      v-for="(item, key) in modalRecord"
       :key="key"
       class="form-group"
-      v-show="!item.hidden"
+      v-show="!item.hidden && !(modalMode === 'add' && item.readonly)"
     >
       <label :for="item.key">{{ item.title }}</label>
       <div class="input-group">
@@ -56,11 +56,11 @@
       </div>
     </div>
     <div class="modal-actions">
-      <button @click="cancelEdit" class="btn-cancel">
+      <button @click="closeModal" class="btn-cancel">
         <font-awesome-icon icon="fa-solid fa-xmark" />
         Cancelar
       </button>
-      <button @click="saveEdit">
+      <button @click="saveModal">
         <font-awesome-icon icon="fa-solid fa-check" />
         Salvar
       </button>
@@ -84,6 +84,11 @@ import _cloneDeep from "lodash/cloneDeep"
 
 const MSG_SESSION_EXPIRED = "Sua sessão expirou! Realize o login novamente."
 
+const ModalMode = Object.freeze({
+  Add: "add",
+  Edit: "edit",
+})
+
 export default {
   components: {
     DataTable,
@@ -97,64 +102,113 @@ export default {
     return {
       content: { type: Array, default: [] },
       isModalOpen: false,
-      recordToEdit: null,
+      modalRecord: null,
+      modalMode: ModalMode.Add,
     }
   },
+  computed: {
+    modalTitle() {
+      if (this.modalMode === ModalMode.Add) return "Adicionar"
+      if (this.modalMode === ModalMode.Edit) return "Editar"
+      return ""
+    },
+  },
   methods: {
-    ...mapActions(["fetchTable", "editTable"]),
+    ...mapActions(["fetchTable", "editRecord", "addRecord"]),
+    checkSessionExpired(error) {
+      const msg = error.response ? error.response.data.error : error
+      if (!msg) return
+      alert(msg)
+      if (msg === MSG_SESSION_EXPIRED) {
+        this.$router.push("/login")
+      }
+    },
+    handleIntegrationError(error) {
+      this.checkSessionExpired(error)
+      const { data } = error.response
+      const msg =
+        data.error ||
+        `Campos obrigatórios: ${data["Campos obrigatórios: "]}` ||
+        data ||
+        "Erro desconhecido ao salvar registro."
+      alert(`Não foi possível salvar. ${msg}`)
+    },
     async getContent() {
       try {
         this.content = []
         this.content = await this.fetchTable(this.table)
       } catch (error) {
-        const msg = error.response.data.error
-        alert(msg)
-        if (msg === MSG_SESSION_EXPIRED) {
-          this.$router.push("/login")
-        }
+        this.checkSessionExpired(error)
       }
     },
-    async editRow() {
+    async saveRecord() {
+      const { modalMode, modalRecord, headers } = this
       try {
-        const oldItem = toRaw(this.recordToEdit)
-        const newItem = {}
-        Object.keys(oldItem).forEach(key => {
-          newItem[key] = oldItem[key].value
-        })
-        return await this.editTable({ endpoint: this.table, data: newItem })
-      } catch (error) {
-        console.error(error)
-        const { data } = error.response
-        const msg =
-          data.error ||
-          `Campos obrigatórios: ${data["Campos obrigatórios: "]}` ||
-          data ||
-          "Erro desconhecido ao editar registro."
-        alert(msg)
-        if (msg === MSG_SESSION_EXPIRED) {
-          this.$router.push("/login")
+        const newRecord = {}
+        if (modalMode === ModalMode.Add) {
+          for (let field of toRaw(headers)) {
+            if (field.readonly) continue
+            const value = toRaw(modalRecord)[field.key].value
+            newRecord[field.altKey || field.key] = value
+          }
+          const payload = { endpoint: this.table, data: newRecord }
+          console.log(payload)
+          return await this.addRecord(payload)
+        } else if (modalMode === ModalMode.Edit) {
+          Object.keys(oldRecord).forEach(key => {
+            if (!key.readonly) {
+              newRecord[key] = oldRecord[key].value
+            }
+          })
+          const payload = { endpoint: this.table, data: newRecord }
+          return await this.editRecord(payload)
+        } else {
+          throw "Erro ao detectar modo de salvar o registro."
         }
+      } catch (error) {
+        this.handleIntegrationError(error)
       }
     },
-    openModal(item) {
-      this.isModalOpen = true
+    saveModal() {
+      if (this.modalMode === ModalMode.Edit) {
+        if (!confirm("Deseja mesmo salvar as alterações?")) return
+        this.saveRecord()
+        this.getContent()
+      } else if (this.modalMode === ModalMode.Add) {
+        if (!confirm("Deseja mesmo adicionar o registro?")) return
+        this.saveRecord()
+        this.getContent()
+      }
+      this.closeModal()
     },
     closeModal() {
       this.isModalOpen = false
+      this.modalRecord = null
+      this.modalMode = null
     },
     startEdit(item) {
-      this.recordToEdit = _cloneDeep(item)
-      this.openModal()
+      this.modalMode = ModalMode.Edit
+      this.modalRecord = _cloneDeep(item)
+      this.isModalOpen = true
     },
-    cancelEdit() {
-      this.recordToEdit = null
-      this.closeModal()
-    },
-    saveEdit() {
-      if (!confirm("Deseja mesmo salvar as alterações?")) return
-      this.editRow()
-      this.closeModal()
-      this.getContent()
+    startAdd() {
+      this.modalMode = ModalMode.Add
+      const emptyRecord = {}
+      this.headers.forEach(field => {
+        const newField = _cloneDeep(field)
+        switch (field.type) {
+          case "checkbox":
+          case "number":
+            newField.value = 0
+            break
+          default:
+            newField.value = ""
+            break
+        }
+        emptyRecord[field.key] = newField
+      })
+      this.modalRecord = emptyRecord
+      this.isModalOpen = true
     },
   },
   async created() {

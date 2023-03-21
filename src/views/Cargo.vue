@@ -1,5 +1,5 @@
 <template>
-  <h2>Base Cargo</h2>
+  <h2>Cargo</h2>
   <Crud :table="table" :headers="headers" />
 </template>
 
@@ -7,11 +7,14 @@
 import Crud from "@components/Crud.vue"
 
 const headers = [
-  { key: "idBaseCargo", altKey: "ID_BASE_CARGO", title: "ID", hidden: true, readonly: true },
+  { key: "idCargo", altKey: "ID_CARGO", title: "ID", hidden: true, readonly: true },
   { key: "ativo", altKey: "ATIVO", title: "Ativo", type: "checkbox" },
   { key: "descricao", altKey: "DESCRICAO", title: "Descrição" },
+  { key: "cidade", altKey: "CIDADE", title: "Cidade", readonly: true },
   { key: "titular", altKey: "TITULAR", title: "Titular", type: "number" },
-  { key: "criadoem", altKey: "CRIADOEM", title: "Criado Em", format: "date", readonly: true },
+  { key: "criadopor", title: "Criado por", readonly: true },
+  { key: "criadoem", title: "Criado em", format: "date", readonly: true },
+  { key: "idCidade", altKey: "ID_CIDADE", title: "ID", hidden: true },
 ]
 
 export default {
@@ -20,7 +23,7 @@ export default {
   },
   data() {
     return {
-      table: "BaseCargo",
+      table: "Cargo",
       headers,
     }
   },

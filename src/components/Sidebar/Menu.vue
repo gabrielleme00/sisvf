@@ -19,48 +19,73 @@ export default {
       menu: [
         {
           text: "Cadastro",
-          icon: "fa-solid fa-table-list",
+          icon: "fa-table-list",
           expanded: false,
           children: [
             {
+              text: "Verificacao",
+              url: "/dashboard/verificacao",
+              icon: "fa-check-circle",
+            },
+            {
               text: "Colaborador",
               url: "/dashboard/colaborador",
-              icon: "fa-solid fa-address-card",
+              icon: "fa-address-card",
+            },
+            {
+              text: "Cargo",
+              url: "/dashboard/cargo",
+              icon: "fa-briefcase",
+            },
+            {
+              text: "Departamento",
+              url: "/dashboard/departamento",
+              icon: "fa-building",
+            },
+            {
+              text: "Cidade",
+              url: "/dashboard/cidade",
+              icon: "fa-map-location-dot",
+            },
+            {
+              text: "Regional",
+              url: "/dashboard/regional",
+              icon: "fa-map",
             },
             {
               text: "Base",
-              icon: "fa-solid fa-database",
+              icon: "fa-database",
               expanded: false,
               children: [
                 {
                   text: "Cargo",
                   url: "/dashboard/base-cargo",
-                  icon: "fa-solid fa-briefcase",
+                  icon: "fa-briefcase",
                 },
                 {
                   text: "Departamento",
                   url: "/dashboard/base-departamento",
-                  icon: "fa-solid fa-building",
+                  icon: "fa-building",
                 },
                 {
                   text: "Checklist",
-                  icon: "fa-solid fa-list-check",
+                  icon: "fa-list-check",
                   expanded: false,
                   children: [
                     {
                       text: "Finalidade",
                       url: "/dashboard/base-finalidade-checklist",
-                      icon: "fa-solid fa-bullseye",
+                      icon: "fa-bullseye",
                     },
                     {
                       text: "Grupo",
                       url: "/dashboard/base-grupo-checklist",
-                      icon: "fa-solid fa-users",
+                      icon: "fa-users",
                     },
                     {
                       text: "Item",
                       url: "/dashboard/base-item-checklist",
-                      icon: "fa-solid fa-file-lines",
+                      icon: "fa-file-lines",
                     },
                   ],
                 },

@@ -4,9 +4,33 @@
       <form @submit.prevent="submitForm">
         <h1>CCB SisVF</h1>
         <label for="username">Usuário</label>
-        <input type="text" class="form-control" id="username" name="username" v-model="username" required>
+        <div class="input-group">
+          <span class="input-group-preppend">
+            <font-awesome-icon icon="fa-solid fa-user" />
+          </span>
+          <input
+            type="text"
+            class="form-control"
+            id="username"
+            name="username"
+            v-model="username"
+            required
+          />
+        </div>
         <label for="password">Senha</label>
-        <input type="password" class="form-control" id="password" name="password" v-model="password" required>
+        <div class="input-group">
+          <span class="input-group-preppend">
+            <font-awesome-icon icon="fa-solid fa-lock" />
+          </span>
+          <input
+            type="password"
+            class="form-control"
+            id="password"
+            name="password"
+            v-model="password"
+            required
+          />
+        </div>
         <button type="submit">Login</button>
       </form>
       <div class="image-wrapper"></div>
@@ -15,24 +39,24 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions } from "vuex"
 
 export default {
   data() {
     return {
-      username: '',
-      password: '',
+      username: "",
+      password: "",
     }
   },
   methods: {
-    ...mapActions(['login']),
+    ...mapActions(["login"]),
     async submitForm() {
       try {
         await this.login({
           Login: this.username,
           Senha: this.password,
         })
-        this.$router.push('/')
+        this.$router.push("/")
       } catch (error) {
         alert(error.response.data.error)
       }
@@ -47,7 +71,7 @@ export default {
 .center-screen {
   width: 100%;
   height: 100vh;
-  display: flex
+  display: flex;
 }
 
 .container {

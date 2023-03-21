@@ -11,6 +11,11 @@ import BaseDepartamento from "@views/BaseDepartamento.vue"
 import BaseItemChecklist from "@views/BaseItemChecklist.vue"
 import BaseFinalidadeChecklist from "@views/BaseFinalidadeChecklist.vue"
 import BaseGrupoChecklist from "@views/BaseGrupoChecklist.vue"
+import Cargo from "@views/Cargo.vue"
+import Cidade from "@views/Cidade.vue"
+import Departamento from "@views/Departamento.vue"
+import Regional from "@views/Regional.vue"
+import Verificacao from "@views/Verificacao.vue"
 
 const routes = [
   { path: "/", redirect: "/dashboard" },
@@ -22,6 +27,11 @@ const routes = [
     children: [
       { path: "", name: "Home", component: Home },
       { path: "colaborador", name: "Colaborador", component: Colaborador },
+      { path: "cargo", name: "Cargo", component: Cargo },
+      { path: "departamento", name: "Departamento", component: Departamento },
+      { path: "cidade", name: "Cidade", component: Cidade },
+      { path: "regional", name: "Regional", component: Regional },
+      { path: "verificacao", name: "Verificacao", component: Verificacao },
       { path: "base-cargo", name: "BaseCargo", component: BaseCargo },
       {
         path: "base-departamento",

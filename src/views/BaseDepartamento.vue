@@ -10,7 +10,7 @@ const headers = [
   { key: "idBaseDepartamento", title: "ID", hidden: true, readonly: true },
   { key: "ativo", title: "Ativo", type: 'checkbox' },
   { key: "descricao", title: "Descrição" },
-  { key: "criadoem", title: "Criado Em", format: "date" },
+  { key: "criadoem", title: "Criado Em", format: "date", readonly: true },
 ]
 
 export default {

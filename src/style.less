@@ -89,7 +89,7 @@ input[type="checkbox"] {
   display: flex;
   align-items: center;
 
-  & > input:first(:first-child) {
+  & > input:not(:first-child) {
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
   }
@@ -99,17 +99,25 @@ input[type="checkbox"] {
     border-bottom-right-radius: 0;
   }
 
+  &-preppend,
   &-append {
     height: 40px;
     display: flex;
     max-height: 100%;
     align-items: center;
-    background-color: @nord10;
+    background-color: @nord0;
     padding: @input-padding;
     box-sizing: border-box;
+    white-space: nowrap;
+  }
+
+  &-preppend {
+    border-top-left-radius: @form-control-border-radius;
+    border-bottom-left-radius: @form-control-border-radius;
+  }
+  &-append {
     border-top-right-radius: @form-control-border-radius;
     border-bottom-right-radius: @form-control-border-radius;
-    white-space: nowrap;
   }
 }
 
