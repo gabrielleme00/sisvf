@@ -1,6 +1,6 @@
 <template>
   <section class="table-actions">
-    <button @click="startAdd">
+    <button @click="startAdd" v-if="create">
       <font-awesome-icon icon="fa-solid fa-plus" />
       Adicionar
     </button>
@@ -10,12 +10,7 @@
     </button>
   </section>
   <modal :show="isModalOpen" :close="closeModal" :title="modalTitle">
-    <div
-      v-for="(item, key) in modalRecord"
-      :key="key"
-      class="form-group"
-      v-show="!item.hidden && !(modalMode === 'add' && item.readonly)"
-    >
+    <div v-for="(item, key) in modalRecord" :key="key" class="form-group">
       <label :for="item.key">{{ item.title }}</label>
       <div class="input-group">
         <template v-if="item.type === 'checkbox'">
@@ -43,6 +38,35 @@
           :step="item.step || 1"
         />
         <input
+          v-else-if="item.type === 'datetime-local'"
+          :type="item.type"
+          :name="key"
+          :id="key"
+          :value="item.value.slice(0, 19)"
+          @input="item.value = $event.target.value"
+          :disabled="item.readonly"
+        />
+        <textarea
+          v-else-if="item.type === 'textarea'"
+          type="text"
+          :name="key"
+          :id="key"
+          v-model="item.value"
+          :disabled="item.readonly"
+        />
+        <select
+          v-else-if="item.type === 'select'"
+          :name="key"
+          :id="key"
+          :value="this.getSelectValue(item)"
+          @input="item.value = $event.target.value"
+          :disabled="item.readonly"
+        >
+          <option v-for="(text, i) in item.options" :key="i" :value="i">
+            {{ text }}
+          </option>
+        </select>
+        <input
           v-else
           type="text"
           :name="key"
@@ -50,9 +74,9 @@
           v-model="item.value"
           :disabled="item.readonly"
         />
-        <span v-if="item.formattedValue" class="input-group-append">
+        <!-- <span v-if="item.formattedValue" class="input-group-append">
           {{ item.formattedValue }}
-        </span>
+        </span> -->
       </div>
     </div>
     <div class="modal-actions">
@@ -89,6 +113,17 @@ const ModalMode = Object.freeze({
   Edit: "edit",
 })
 
+const FETCH_DELAY = 1000
+
+const getFieldValueForPayload = field => {
+  const { value, type } = field
+  if (type === "datetime-local") {
+    const localDateTime = value.replace("Z", "-03:00")
+    return new Date(localDateTime).toLocaleString("en-US")
+  }
+  return value
+}
+
 export default {
   components: {
     DataTable,
@@ -97,6 +132,7 @@ export default {
   props: {
     table: { type: String, required: true, default: "" },
     headers: { type: Array, required: true, default: [] },
+    create: { type: Boolean, default: true },
   },
   data() {
     return {
@@ -114,7 +150,12 @@ export default {
     },
   },
   methods: {
-    ...mapActions(["fetchTable", "editRecord", "addRecord"]),
+    ...mapActions(["readRecords", "updateRecord", "createRecord"]),
+    getSelectValue(item) {
+      const position = item.options.indexOf(item.value)
+      const value = position > -1 ? position : item.value
+      return value
+    },
     checkSessionExpired(error) {
       const msg = error.response ? error.response.data.error : error
       if (!msg) return
@@ -134,12 +175,14 @@ export default {
       alert(`Não foi possível salvar. ${msg}`)
     },
     async getContent() {
-      try {
-        this.content = []
-        this.content = await this.fetchTable(this.table)
-      } catch (error) {
-        this.checkSessionExpired(error)
-      }
+      this.content = []
+      setTimeout(() => {
+        this.readRecords(this.table)
+          .then(res => {
+            this.content = res.data
+          })
+          .catch(error => this.checkSessionExpired(error))
+      }, FETCH_DELAY)
     },
     async saveRecord() {
       const { modalMode, modalRecord, headers } = this
@@ -152,16 +195,21 @@ export default {
             newRecord[field.altKey || field.key] = value
           }
           const payload = { endpoint: this.table, data: newRecord }
-          console.log(payload)
-          return await this.addRecord(payload)
+          return this.createRecord(payload)
         } else if (modalMode === ModalMode.Edit) {
+          const oldRecord = _cloneDeep(modalRecord)
           Object.keys(oldRecord).forEach(key => {
-            if (!key.readonly) {
-              newRecord[key] = oldRecord[key].value
+            const field = toRaw(headers).filter(field => field.key === key)[0]
+            const isIdField = key.toLowerCase().slice(0, 2).includes("id")
+            if (!field.readonly || isIdField) {
+              const value = getFieldValueForPayload(oldRecord[key])
+              if (key == "cidade") debugger
+              newRecord[field.altKey || field.key] = value
             }
           })
           const payload = { endpoint: this.table, data: newRecord }
-          return await this.editRecord(payload)
+          console.log(payload)
+          return this.updateRecord(payload)
         } else {
           throw "Erro ao detectar modo de salvar o registro."
         }
@@ -172,13 +220,10 @@ export default {
     saveModal() {
       if (this.modalMode === ModalMode.Edit) {
         if (!confirm("Deseja mesmo salvar as alterações?")) return
-        this.saveRecord()
-        this.getContent()
       } else if (this.modalMode === ModalMode.Add) {
         if (!confirm("Deseja mesmo adicionar o registro?")) return
-        this.saveRecord()
-        this.getContent()
-      }
+      } else this.closeModal()
+      this.saveRecord().then(this.getContent).catch(this.handleIntegrationError)
       this.closeModal()
     },
     closeModal() {

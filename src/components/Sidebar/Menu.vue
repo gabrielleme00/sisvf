@@ -91,6 +91,23 @@ export default {
                 },
               ],
             },
+            {
+              text: "Presidência",
+              icon: "fa-place-of-worship",
+              expanded: false,
+              children: [
+                {
+                  text: "Checklist",
+                  url: "/dashboard/presidencia-checklist",
+                  icon: "fa-list-check",
+                },
+                {
+                  text: "Item Checklist",
+                  url: "/dashboard/presidencia-item-checklist",
+                    icon: "fa-list",
+                },
+              ],
+            },
           ],
         },
       ],

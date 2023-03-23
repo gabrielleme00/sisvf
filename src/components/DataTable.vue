@@ -72,7 +72,7 @@ export default {
           newItem[key] = {
             ...header,
             value: item[key],
-            formattedValue: format ? this.formatValue(item[key], format) : null,
+            formattedValue: format ? this.formatValue(item[key], header) : null,
           }
         })
         return newItem
@@ -111,13 +111,21 @@ export default {
       }
       this.sortedBy = headerKey
     },
-    formatValue(value, formatType) {
-      if (!formatType) return value
-      if (formatType === "date") {
-        return new Date(value).toLocaleDateString()
+    formatValue(value, header) {
+      const { format } = header
+      if (!format) return value
+      const timezone = "-03:00"
+      if (format === "date") {
+        if (!value) return value
+        return new Date(value.replace("Z", timezone)).toLocaleDateString("pt-BR")
       }
-      if (formatType === "datetime") {
-        return new Date(value).toLocaleString()
+      if (format === "datetime") {
+        if (!value) return value
+        return new Date(value.replace("Z", timezone)).toLocaleString("pt-BR")
+      }
+      if (format === "select") {
+        const option = header.options[value]
+        if (option) return option
       }
       return value
     },
@@ -130,13 +138,19 @@ export default {
 
 table {
   width: 100%;
+  max-height: 500px;
   border-collapse: collapse;
   background-color: @nord0;
   color: @nord4;
   font-size: 16px;
   line-height: 1.5;
   border-radius: 8px;
-  overflow: hidden;
+  overflow: auto;
+  display: block;
+
+  thead {
+    white-space: nowrap;
+  }
 }
 
 th,

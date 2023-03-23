@@ -1,7 +1,7 @@
 @import "node_modules/nord/src/lesscss/nord.less";
 
 @btn-hover-opacity: 0.75;
-@input-padding: .375rem .75rem;
+@input-padding: 0.375rem 0.75rem;
 @form-control-border-radius: 0.25rem;
 
 :root {
@@ -47,9 +47,9 @@ h6 {
   font-weight: unset;
 }
 
-input[type="text"],
-input[type="password"],
-input[type="number"] {
+textarea,
+select,
+input:not([type="checkbox"]) {
   all: unset;
   box-sizing: border-box;
   text-align: left;
@@ -62,12 +62,21 @@ input[type="number"] {
   background-color: @nord6;
   color: @nord0;
 
+  &::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+  }
+
   &:disabled {
     cursor: not-allowed;
     background-color: @nord4;
     color: @nord10;
     opacity: 0.9;
   }
+}
+
+textarea {
+  min-height: 5rem;
+  resize: vertical;
 }
 
 input[type="checkbox"] {
@@ -85,7 +94,7 @@ input[type="checkbox"] {
 }
 
 .input-group {
-  height: 40px;
+  min-height: 40px;
   display: flex;
   align-items: center;
 

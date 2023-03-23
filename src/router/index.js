@@ -16,6 +16,8 @@ import Cidade from "@views/Cidade.vue"
 import Departamento from "@views/Departamento.vue"
 import Regional from "@views/Regional.vue"
 import Verificacao from "@views/Verificacao.vue"
+import PresidenciaChecklist from "@views/PresidenciaChecklist.vue"
+import PresidenciaItemChecklist from "@views/PresidenciaItemChecklist.vue"
 
 const routes = [
   { path: "/", redirect: "/dashboard" },
@@ -52,6 +54,16 @@ const routes = [
         path: "base-grupo-checklist",
         name: "BaseGrupoChecklist",
         component: BaseGrupoChecklist,
+      },
+      {
+        path: "presidencia-checklist",
+        name: "PresidenciaChecklist",
+        component: PresidenciaChecklist,
+      },
+      {
+        path: "presidencia-item-checklist",
+        name: "PresidenciaItemChecklist",
+        component: PresidenciaItemChecklist,
       },
     ],
   },

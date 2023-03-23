@@ -2,6 +2,12 @@ import Vuex from "vuex"
 import axios from "axios"
 import createPersistedState from "vuex-plugin-persistedstate"
 
+const getApiConfig = state => {
+  return {
+    headers: { Sessao: state.token, "Content-Type": "application/json" },
+  }
+}
+
 export default new Vuex.Store({
   state: {
     user: null,
@@ -39,32 +45,23 @@ export default new Vuex.Store({
         throw error
       }
     },
-    async fetchTable({ state }, endpoint) {
+    async readRecords({ state }, endpoint) {
       try {
-        const response = await axios.get(`/api/${endpoint}`, {
-          headers: { Sessao: state.token, "Content-Type": "application/json" },
-        })
-        return response.data
+        return axios.get(`/api/${endpoint}`, getApiConfig(state))
       } catch (error) {
         throw error
       }
     },
-    async editRecord({ state }, { endpoint, data }) {
+    async updateRecord({ state }, { endpoint, data }) {
       try {
-        const response = await axios.put(`/api/${endpoint}`, data, {
-          headers: { Sessao: state.token, "Content-Type": "application/json" },
-        })
-        return response.data
+        return axios.put(`/api/${endpoint}`, data, getApiConfig(state))
       } catch (error) {
         throw error
       }
     },
-    async addRecord({ state }, { endpoint, data }) {
+    async createRecord({ state }, { endpoint, data }) {
       try {
-        const response = await axios.post(`/api/${endpoint}`, data, {
-          headers: { Sessao: state.token, "Content-Type": "application/json" },
-        })
-        return response.data
+        return axios.post(`/api/${endpoint}`, data, getApiConfig(state))
       } catch (error) {
         throw error
       }

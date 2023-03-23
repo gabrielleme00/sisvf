@@ -20,14 +20,16 @@
 <script>
 export default {
   props: {
-    title: { type: String, default: '' },
+    title: { type: String, default: "" },
     show: { type: Boolean, default: false },
     close: { type: Function, default: () => {} },
+    closeOnClickOutside: { type: Boolean, default: false },
   },
   methods: {
     handleClickOutside(event) {
-      const isOutside = event.target.className === 'modal'
-      if (isOutside) this.close()
+      const { closeOnClickOutside } = this
+      const isOutside = event.target.className === "modal"
+      if (closeOnClickOutside && isOutside) this.close()
     },
   },
 }

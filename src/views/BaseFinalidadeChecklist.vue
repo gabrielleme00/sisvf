@@ -9,14 +9,20 @@ import Crud from "@components/Crud.vue"
 const headers = [
   {
     key: "idBaseFinalidadeChecklist",
+    altKey: "ID_BASE_FINALIDADE_CHECKLIST",
     title: "ID",
     hidden: true,
     readonly: true,
   },
-  { key: "ativo", title: "Ativo", type: "checkbox" },
-  { key: "descricao", title: "Descrição" },
-  { key: "basedepartamento", title: "Base Departamento" },
-  { key: "ordem", title: "Ordem" },
+  { key: "ativo", altKey: "ATIVO", title: "Ativo", type: "checkbox" },
+  { key: "descricao", altKey: "DESCRICAO", title: "Descrição" },
+  { key: "ordem", altKey: "ORDEM", title: "Ordem", type: "number" },
+  { key: "basedepartamento", title: "Base Departamento", readonly: true },
+  {
+    key: "idBaseDepartamento",
+    altKey: "ID_BASE_DEPARTAMENTO",
+    title: "ID Base Departamento",
+  },
 ]
 
 export default {

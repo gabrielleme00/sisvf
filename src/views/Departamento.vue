@@ -12,8 +12,8 @@ const headers = [
   { key: "descricao", altKey: "DESCRICAO", title: "Descrição" },
   { key: "cidade", altKey: "CIDADE", title: "Cidade", readonly: true },
   { key: "criadopor", title: "Criado por", readonly: true },
-  { key: "criadoem", title: "Criado em", format: "date", readonly: true },
-  { key: "idCidade", altKey: "ID_CIDADE", title: "ID", hidden: true },
+  { key: "criadoem", title: "Criado em", type: "datetime-local", format: "date", readonly: true },
+  { key: "idCidade", altKey: "ID_CIDADE", title: "ID Cidade", hidden: true },
 ]
 
 export default {

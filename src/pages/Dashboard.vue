@@ -26,10 +26,10 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['fetchTable']),
+    ...mapActions(['readRecords']),
     async getPermissions() {
       try {
-        await this.fetchTable('ListPermission')
+        await this.readRecords('ListPermission')
       } catch (error) {
         const msg = error.response.data.error
         alert(msg)
@@ -59,5 +59,6 @@ main {
 
 .content {
   padding: 0 2rem;
+  max-width: 70vw;
 }
 </style>

@@ -45,6 +45,7 @@ header {
   flex-grow: 1;
   justify-content: end;
   margin: 0;
+  padding: 0 3rem;
 }
 
 .header-item {

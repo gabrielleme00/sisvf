@@ -12,10 +12,10 @@ const headers = [
   { key: "regional", title: "Regional", readonly: true },
   { key: "qtdeTitulares", altKey: "QTDE_TITULARES", title: "Qtde. Titulares", type: "number" },
   { key: "qtdeColaboradores", altKey: "QTDE_COLABORADORES", title: "Qtde. Colaboradores", type: "number" },
-  { key: "dtFormacao", altKey: "DT_FORMACAO", title: "Data de Formação", format: "date" },
+  { key: "dtFormacao", altKey: "DT_FORMACAO", title: "Data de Formação", type: "datetime-local", format: "date" },
   { key: "criadopor", title: "Criado Por", readonly: true },
-  { key: "criadoem", title: "Data de Formação", format: "date", readonly: true },
-  { key: "idRegional", altTitle: "ID_REGIONAL", hidden:true },
+  { key: "criadoem", title: "Data de Formação", type: "datetime-local", format: "date", readonly: true },
+  { key: "idRegional", altKey: "ID_REGIONAL", title: "ID Regional" },
 ]
 
 export default {
