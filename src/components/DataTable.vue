@@ -11,6 +11,7 @@
             'sorted-desc': sortedBy === header.key && sortOrder === -1,
           }"
           @click="sortBy(header.key)"
+          :style="header.style"
         >
           {{ header.title || header.key }}
         </th>
@@ -146,7 +147,6 @@ table {
   line-height: 1.5;
   border-radius: 8px;
   overflow: auto;
-  display: block;
 
   thead {
     white-space: nowrap;

@@ -6,7 +6,7 @@
 <script>
 import Crud from "@components/Crud.vue"
 
-const headers = [
+const base = [
   {
     key: "idPresidenciaChecklist",
     altKey: "ID_PRESIDENCIA_CHECKLIST",
@@ -14,6 +14,75 @@ const headers = [
     hidden: true,
     readonly: true,
   },
+  {
+    key: "status",
+    altKey: "STATUS",
+    title: "Status",
+    type: "select",
+    options: ["EM ABERTO", "CONCLUIDO", "PARCIAL", "NAO CONSIDERADO"],
+    format: "select",
+  },
+  {
+    key: "dataInicial",
+    title: "Data Inicial",
+    format: "date",
+    readonly: true,
+  },
+  {
+    key: "dataFinal",
+    title: "Data Final",
+    format: "date",
+    readonly: true,
+  },
+  {
+    key: "observacao",
+    altKey: "OBSERVACAO",
+    title: "Observação",
+  },
+  {
+    key: "tipo",
+    title: "Tipo",
+    readonly: true,
+  },
+  {
+    key: "dataVerificacao",
+    title: "Data Verificação",
+    format: "date",
+    readonly: true,
+  },
+]
+
+const lifetime = [
+  {
+    key: "criadopor",
+    title: "Criado por",
+    readonly: true,
+  },
+  {
+    key: "alteradopor",
+    title: "Alterado por",
+    readonly: true,
+  },
+  {
+    key: "criadoem",
+    title: "Criado em",
+    format: "datetime",
+    readonly: true,
+  },
+  {
+    key: "alteradoem",
+    title: "Alterado em",
+    format: "datetime",
+    readonly: true,
+  },
+  {
+    key: "concluidopor",
+    title: "Concluído por",
+    readonly: true,
+  },
+]
+
+const accounting = [
   {
     key: "receitasColetasOfertas",
     altKey: "RECEITAS_COLETAS_OFERTAS",
@@ -56,69 +125,6 @@ const headers = [
     title: "Qtde. Irmãos Sta. Ceia",
     type: "number",
   },
-  {
-    key: "criadopor",
-    title: "Criado por",
-    readonly: true,
-  },
-  {
-    key: "alteradopor",
-    title: "Alterado por",
-    readonly: true,
-  },
-  {
-    key: "criadoem",
-    title: "Criado em",
-    format: "datetime",
-    readonly: true,
-  },
-  {
-    key: "alteradoem",
-    title: "Alterado em",
-    format: "datetime",
-    readonly: true,
-  },
-  {
-    key: "concluidopor",
-    title: "Concluído por",
-    readonly: true,
-  },
-  {
-    key: "status",
-    altKey: "STATUS",
-    title: "Status",
-    type: "select",
-    options: ["EM ABERTO", "CONCLUIDO", "PARCIAL", "NAO CONSIDERADO"],
-    format: "select",
-  },
-  {
-    key: "tipo",
-    title: "Tipo",
-    readonly: true,
-  },
-  {
-    key: "dataVerificacao",
-    title: "Data Verificação",
-    format: "date",
-    readonly: true,
-  },
-  {
-    key: "dataInicial",
-    title: "Data Inicial",
-    format: "date",
-    readonly: true,
-  },
-  {
-    key: "dataFinal",
-    title: "Data Final",
-    format: "date",
-    readonly: true,
-  },
-  {
-    key: "observacao",
-    altKey: "OBSERVACAO",
-    title: "Observação",
-  },
 ]
 
 export default {
@@ -128,7 +134,7 @@ export default {
   data() {
     return {
       table: "PresidenciaChecklist",
-      headers,
+      headers: [...base, ...lifetime, ...accounting],
     }
   },
 }

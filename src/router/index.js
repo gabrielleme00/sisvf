@@ -19,6 +19,8 @@ import Verificacao from "@views/Verificacao.vue"
 import PresidenciaChecklist from "@views/PresidenciaChecklist.vue"
 import PresidenciaItemChecklist from "@views/PresidenciaItemChecklist.vue"
 
+import Preenchimento from "@components/Fulfillment.vue" 
+
 const routes = [
   { path: "/", redirect: "/dashboard" },
   { path: "/login", name: "Login", component: Login },
@@ -28,6 +30,7 @@ const routes = [
     component: Dashboard,
     children: [
       { path: "", name: "Home", component: Home },
+      { path: "preenchimento", name: "Preenchimento", component: Preenchimento },
       { path: "colaborador", name: "Colaborador", component: Colaborador },
       { path: "cargo", name: "Cargo", component: Cargo },
       { path: "departamento", name: "Departamento", component: Departamento },

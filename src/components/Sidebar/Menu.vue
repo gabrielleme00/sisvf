@@ -18,6 +18,11 @@ export default {
     return {
       menu: [
         {
+          text: "Preenchimento",
+          icon: "fa-clipboard-check",
+          url: "/dashboard/preenchimento",
+        },
+        {
           text: "Cadastro",
           icon: "fa-table-list",
           expanded: false,

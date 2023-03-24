@@ -28,9 +28,11 @@
       />
     </div>
     <ul class="folder-items" v-if="data.expanded">
-      <li v-for="item in data.children" :key="item.url">
-        <MenuItem :data="item" />
-      </li>
+      <div class="folder-items-wrapper">
+        <li v-for="item in data.children" :key="item.url">
+          <MenuItem :data="item" />
+        </li>
+      </div>
     </ul>
   </div>
 </template>
@@ -71,8 +73,6 @@ li {
 .folder {
   display: block;
   height: 100%;
-  margin-left: 10px;
-  padding: 10px 0 10px 1rem;
 
   .text {
     user-select: none;
@@ -82,12 +82,12 @@ li {
 .menu-item,
 .folder-link {
   cursor: pointer;
+  padding: 10px 0 10px 1rem;
 }
 
 .menu-item {
   color: @nord4;
   font-weight: 400;
-  border-left: 1px solid @nord3;
 
   &:hover {
     background-color: @nord3;
@@ -111,6 +111,11 @@ li {
 
   &-items {
     padding-left: 0;
+
+    &-wrapper {
+      border-left: 1px solid @nord3;
+      margin-left: 25px;
+    }
   }
 }
 </style>

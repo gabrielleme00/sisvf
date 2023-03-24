@@ -33,6 +33,7 @@ const headers = [
     altKey: "DESCRICAO",
     title: "Descrição",
     type: "textarea",
+    style: { minWidth: "400px" },
   },
   {
     key: "ordem",
