@@ -147,10 +147,6 @@ table {
   line-height: 1.5;
   border-radius: 8px;
   overflow: auto;
-
-  thead {
-    white-space: nowrap;
-  }
 }
 
 th,

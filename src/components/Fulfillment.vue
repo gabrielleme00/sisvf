@@ -8,7 +8,10 @@
     <p>{{ error }}</p>
   </Alert>
   <Alert v-else-if="!checklists.length" type="success">
-    Não há checklists em aberto no momento!
+    <a href="/dashboard/presidencia-checklist">
+      Não há checklists em aberto no momento! Clique aqui para ver todas as
+      checklists.
+    </a>
   </Alert>
   <Alert v-else type="warning">
     Há uma ou mais checklists a serem preenchidas!
@@ -28,43 +31,64 @@
           class="number-info"
         >
           <div class="number-info-title">{{ info.title }}</div>
-          <div class="number-info-value">{{ info.value }}</div>
+          <div class="number-info-value input-group">
+            <span v-if="info.isMoney" class="input-group-preppend">R$</span>
+            <input type="number" v-model="checklist[info.field]" />
+          </div>
         </div>
       </div>
       <div v-if="checklist.observacao" class="checklist-note">
-        <b>Observação:</b>
+        <b>Observação</b>
         <p>{{ checklist.observacao }}</p>
       </div>
       <hr />
-      <div v-if="checklist.checklistItems && checklist.checklistItems.length">
+      <div v-if="checklist.items && checklist.items.length">
         <h3>Itens da Checklist</h3>
         <ol class="checklist-items">
           <li
-            v-for="(item, i) in checklist.checklistItems"
+            v-for="(item, i) in checklist.items"
             :key="i"
             :class="{ highlight: item.sinalizarItem }"
           >
-            <div>
-              <p><b>{{ item.ordem }}.</b> {{ item.descricao }}</p>
-              <div v-if="item.observacao">
-                <b>Observação:</b>
-                <p>{{ item.observacao }}</p>
+            <p class="item-description">
+              <b>{{ (i + 1).toString().padStart(2, "0") }}.</b>
+              {{ item.descricao }}
+            </p>
+            <div class="item-inputs">
+              <div>
+                <label :for="`item_note_${i}`">Opção</label>
+                <select v-model="item.opcaoEscolhida">
+                  <option value="" disabled selected>Selecione...</option>
+                  <option v-for="(text, i) in itemOptions" :key="i" :value="i">
+                    {{ text }}
+                  </option>
+                </select>
               </div>
-            </div>
-            <div>
-              <select :value="getOptionValueByText(item.opcaoEscolhida)">
-                <option value="0">NAO</option>
-                <option value="1">SIM</option>
-                <option value="2">ADEQUADO</option>
-                <option value="3">MELHORAR</option>
-                <option value="4">CRITICO</option>
-                <option value="5">ISENTO</option>
-              </select>
+              <div class="item-note">
+                <label :for="`item_note_${i}`">Observação</label>
+                <textarea
+                  :id="`item_note_${i}`"
+                  v-model="item.observacao"
+                  maxlength="250"
+                  placeholder="(Opcional)"
+                ></textarea>
+              </div>
             </div>
           </li>
         </ol>
       </div>
       <Alert v-else type="danger">Erro ao carregar itens do checklist.</Alert>
+      <button
+        :disabled="!allItemsCompleted(checklist.items)"
+        @click="() => handleClickFinish(checklist)"
+      >
+        Finalizar Checklist
+      </button>
+      <Alert
+        v-if="checklist.finishProcessStatus.message"
+        :icon="checklist.finishProcessStatus.icon"
+        >{{ checklist.finishProcessStatus.message }}</Alert
+      >
     </div>
   </section>
 </template>
@@ -73,6 +97,151 @@
 import { mapActions } from "vuex"
 import Alert from "@components/Alert.vue"
 import { formatMixin } from "@mixins/format.js"
+
+const MOCK_CHECKLISTS = [
+  {
+    idPresidenciaChecklist: "0926C120-F35B-4CF5-BF3B-8B7D6D8F146C",
+    receitasColetasOfertas: 0,
+    ofertasMdoVoluntaria: 0,
+    receitasDiversas: 0,
+    totalDespesas: 0,
+    crescimentoImobilizado: 0,
+    patrimonioLiquidoSaldo: 0,
+    qtdeIrmaosSantaCeia: 0,
+    criadopor: "MIKIO",
+    alteradopor: "GABRIEL",
+    criadoem: "2023-03-22T00:28:28.280Z",
+    alteradoem: "2023-03-26T03:25:39.000Z",
+    concluidopor: null,
+    concluidoem: null,
+    status: "EM ABERTO",
+    tipo: "RESTRITO",
+    dataVerificacao: "2023-04-01T00:00:00.000Z",
+    dataInicial: "2022-01-01T00:00:00.000Z",
+    dataFinal: "2022-12-31T00:00:00.000Z",
+    observacao: "Verificacao de teste",
+  },
+]
+
+const MOCK_ITEMS = [
+  {
+    idPresidenciaItemChecklist: "92781790-D7BB-4EE3-BC77-D8A33204477F",
+    idPresidenciaChecklist: "0926C120-F35B-4CF5-BF3B-8B7D6D8F146C",
+    descricao:
+      "ACUMULO DE CARGO MINISTERIAL: Anciães, Diáconos e Cooperador com cargo administrativo? (Presidente, Secretário, Tesoureiro, Vices, Conselho Fiscal e Suplente - Parágrafo único do Art. 5º do Estatuto).\t\t\t\t\t\t\t\t\t\t",
+    ordem: 20,
+    sinalizarItem: 0,
+    idBaseItemChecklist: "E34739EA-1477-4E7A-B530-AF8FD41857FD",
+    concluidopor: null,
+    concluidoem: null,
+    opcaoEscolhida: "",
+    observacao: null,
+  },
+  {
+    idPresidenciaItemChecklist: "083364FC-D437-4F4F-ABCE-D715BE835DA1",
+    idPresidenciaChecklist: "0926C120-F35B-4CF5-BF3B-8B7D6D8F146C",
+    descricao:
+      "DUPLICIDADE DE CARGOS: Existe acumulo de função dos irmão que formam a Administração, atuando em mais de uma área.\t\t\t\t\t\t\t\t\t\t",
+    ordem: 30,
+    sinalizarItem: 0,
+    idBaseItemChecklist: "56C053D7-C62A-4896-B570-413E6A1DC303",
+    concluidopor: null,
+    concluidoem: null,
+    opcaoEscolhida: "",
+    observacao: null,
+  },
+  {
+    idPresidenciaItemChecklist: "C713A84E-C006-4164-A58F-7F542FEE0364",
+    idPresidenciaChecklist: "0926C120-F35B-4CF5-BF3B-8B7D6D8F146C",
+    descricao:
+      "EQUIPAMENTOS: Há equipamentos suficientes para o exercício das funções como computadores, notebooks, projetor, internet, instalações e softwares.\t\t\t\t\t\t\t\t\t\t",
+    ordem: 40,
+    sinalizarItem: 0,
+    idBaseItemChecklist: "C122BE3A-729D-4A14-B2E3-6C5AF819FFE9",
+    concluidopor: null,
+    concluidoem: null,
+    opcaoEscolhida: "",
+    observacao: null,
+  },
+  {
+    idPresidenciaItemChecklist: "DA2A4895-73F2-4E4E-AFFE-C4931C669922",
+    idPresidenciaChecklist: "0926C120-F35B-4CF5-BF3B-8B7D6D8F146C",
+    descricao:
+      "O presidente assina os cheques e ou os pagamentos a fornecedores junto com o Secretário e Tesoureiro.\t\t\t\t\t\t\t\t\t\t",
+    ordem: 50,
+    sinalizarItem: 0,
+    idBaseItemChecklist: "36EC19A5-43A1-4B26-9096-9081A5494790",
+    concluidopor: null,
+    concluidoem: null,
+    opcaoEscolhida: "",
+    observacao: null,
+  },
+  {
+    idPresidenciaItemChecklist: "4E8372DC-EB4D-4152-99F3-1F74745CED7A",
+    idPresidenciaChecklist: "0926C120-F35B-4CF5-BF3B-8B7D6D8F146C",
+    descricao:
+      "O presidente é o usuário máster para a movimentação das contas bancárias pela internet.\t\t\t\t\t\t\t\t\t\t",
+    ordem: 60,
+    sinalizarItem: 0,
+    idBaseItemChecklist: "FC8AD085-346E-417A-A744-6BFF21A8D775",
+    concluidopor: null,
+    concluidoem: null,
+    opcaoEscolhida: "",
+    observacao: null,
+  },
+  {
+    idPresidenciaItemChecklist: "08CA3690-962E-40C3-9A93-3499DD16031A",
+    idPresidenciaChecklist: "0926C120-F35B-4CF5-BF3B-8B7D6D8F146C",
+    descricao:
+      "O presidente realiza reuniões mensais só com os membros da administração para tratar temas internos.\t\t\t\t\t\t\t\t\t\t",
+    ordem: 70,
+    sinalizarItem: 0,
+    idBaseItemChecklist: "535D2E87-BAEC-4DB5-A934-41A0EBF9AEDE",
+    concluidopor: null,
+    concluidoem: null,
+    opcaoEscolhida: "",
+    observacao: null,
+  },
+  {
+    idPresidenciaItemChecklist: "515764D9-5978-495B-8299-D7316F338EBC",
+    idPresidenciaChecklist: "0926C120-F35B-4CF5-BF3B-8B7D6D8F146C",
+    descricao:
+      "O presidente compartilha com o CF os assuntos relevantes e busca orientação dos mesmos.\t\t\t\t\t\t\t\t\t\t",
+    ordem: 80,
+    sinalizarItem: 0,
+    idBaseItemChecklist: "7E6144AF-A565-4153-A8B6-BA28135DC0E5",
+    concluidopor: null,
+    concluidoem: null,
+    opcaoEscolhida: "",
+    observacao: null,
+  },
+  {
+    idPresidenciaItemChecklist: "68E65518-A047-420F-8471-CC157DFDB38D",
+    idPresidenciaChecklist: "0926C120-F35B-4CF5-BF3B-8B7D6D8F146C",
+    descricao:
+      "A presidência enviou relatório de resposta aos apontamentos levantados na ultima averiguação pela Regional.\t\t\t\t\t\t\t\t\t\t",
+    ordem: 90,
+    sinalizarItem: 0,
+    idBaseItemChecklist: "50B2882B-D108-425D-A3B6-B9621A6A863C",
+    concluidopor: null,
+    concluidoem: null,
+    opcaoEscolhida: "",
+    observacao: null,
+  },
+  {
+    idPresidenciaItemChecklist: "5E3847CC-5A11-40AB-AA5E-1025C93E5D16",
+    idPresidenciaChecklist: "0926C120-F35B-4CF5-BF3B-8B7D6D8F146C",
+    descricao:
+      "As não conformidades e as recomendações apontadas na averiguação anterior foram tratadas em sua maioria.\t\t\t\t\t\t\t\t\t\t",
+    ordem: 100,
+    sinalizarItem: 1,
+    idBaseItemChecklist: "D2D0379B-A1DC-4958-AEED-039322958E7D",
+    concluidopor: null,
+    concluidoem: null,
+    opcaoEscolhida: "",
+    observacao: null,
+  },
+]
 
 export default {
   mixins: [formatMixin],
@@ -87,16 +256,69 @@ export default {
     }
   },
   methods: {
-    ...mapActions(["readRecords"]),
-    getOptionValueByText(text) {
-      return [
-        "NAO",
-        "SIM",
-        "ADEQUADO",
-        "MELHORAR",
-        "CRITICO",
-        "ISENTO",
-      ].indexOf(text)
+    ...mapActions(["readRecords", "updateRecord"]),
+    finishChecklist(checklist) {
+      const {
+        idPresidenciaChecklist,
+        receitasColetasOfertas,
+        ofertasMdoVoluntaria,
+        receitasDiversas,
+        totalDespesas,
+        crescimentoImobilizado,
+        patrimonioLiquidoSaldo,
+        qtdeIrmaosSantaCeia,
+      } = checklist
+      const data = {
+        ID_PRESIDENCIA_CHECKLIST: idPresidenciaChecklist,
+        ID_VERIFICACAO: "D7D363CA-2FE8-4854-B943-14A5E235E560",
+        RECEITAS_COLETAS_OFERTAS: receitasColetasOfertas,
+        OFERTAS_MDO_VOLUNTARIA: ofertasMdoVoluntaria,
+        RECEITAS_DIVERSAS: receitasDiversas,
+        TOTAL_DESPESAS: totalDespesas,
+        CRESCIMENTO_IMOBILIZADO: crescimentoImobilizado,
+        PATRIMONIO_LIQUIDO_SALDO: patrimonioLiquidoSaldo,
+        QTDE_IRMAOS_SANTA_CEIA: qtdeIrmaosSantaCeia,
+        STATUS: 0,
+      }
+      const update = () => {
+        this.updateRecord({ endpoint: "PresidenciaChecklist", data })
+      }
+      console.log(data)
+      return
+      return new Promise((ok, err) =>
+        setTimeout(() => update().then(res => ok(res)), 1000)
+      )
+    },
+    finishChecklistItem(item, index) {
+      return new Promise((ok, err) => setTimeout(ok, index * 1000))
+    },
+    handleClickFinish(checklist) {
+      const setStatus = (icon, message) => {
+        checklist.finishProcessStatus = { icon, message }
+      }
+
+      setStatus("info", "Salvando itens...")
+      const itemPromises = checklist.items.map(this.finishChecklistItem)
+      Promise.all(itemPromises).then(() => {
+        setStatus("info", "Itens salvos com sucesso! Salvando checklist...")
+        this.finishChecklist(checklist)
+          .catch(error => {
+            setStatus(
+              "danger",
+              `Erro ao tentar finalizar a checklist:  ${error}`
+            )
+          })
+          .then(res => {
+            setStatus(
+              "success",
+              "Checklist e seus respectivos itens salvos com sucesso!"
+            )
+          })
+      })
+    },
+    allItemsCompleted(items) {
+      const notCompleted = item => item.opcaoEscolhida === ""
+      return items.filter(notCompleted).length === 0
     },
     getHeaderItems(checklist) {
       const { formatDate } = this
@@ -122,20 +344,35 @@ export default {
       return [
         {
           title: "Receitas Coletas Ofertas",
-          value: formatMoney(receitasColetasOfertas),
+          field: "receitasColetasOfertas",
+          isMoney: true,
         },
         {
           title: "Ofertas Mdo. Voluntária",
-          value: formatMoney(ofertasMdoVoluntaria),
+          field: "ofertasMdoVoluntaria",
+          isMoney: true,
         },
         {
           title: "Saldo de Patrimônio Líquido",
-          value: formatMoney(patrimonioLiquidoSaldo),
+          field: "patrimonioLiquidoSaldo",
+          isMoney: true,
         },
-        { title: "Receitas Diversas", value: formatMoney(receitasDiversas) },
-        { title: "Total de Despesas", value: formatMoney(totalDespesas) },
-        { title: "Crescimento Imobilizado", value: `${crescimentoImobilizado}%` },
-        { title: "Qtde. Irmãos na Santa Ceia", value: qtdeIrmaosSantaCeia },
+        {
+          title: "Receitas Diversas",
+          field: "receitasDiversas",
+          isMoney: true,
+        },
+        {
+          title: "Total de Despesas",
+          field: "totalDespesas",
+          isMoney: true,
+        },
+        {
+          title: "Crescimento Imobilizado",
+          field: "crescimentoImobilizado",
+          isMoney: true,
+        },
+        { title: "Qtde. Irmãos na Santa Ceia", field: "qtdeIrmaosSantaCeia" },
       ]
     },
   },
@@ -143,14 +380,19 @@ export default {
     canShowChecklists() {
       return !this.loading && !this.error && this.checklists.length
     },
+    itemOptions() {
+      return ["NAO", "SIM", "ADEQUADO", "MELHORAR", "CRITICO", "ISENTO"]
+    },
   },
   mounted() {
     // TODO: implement delay on readRecords
     Promise.all([
       this.readRecords("PresidenciaChecklist"),
+      // { data: MOCK_CHECKLISTS },
       new Promise((resolve, reject) =>
         setTimeout(() => {
           this.readRecords("PresidenciaItemChecklist").then(res => resolve(res))
+          // resolve({ data: MOCK_ITEMS })
         }, 1000)
       ),
     ])
@@ -159,14 +401,15 @@ export default {
         values[1].data.filter(item => !item.concluidoem),
       ])
       .then(values => {
-        const [checklists, checklistItems] = values
+        const [checklists, items] = values
         return checklists.map(checklist => {
           const { idPresidenciaChecklist } = checklist
           const isChild = item =>
             (item.idPresidenciaChecklist = idPresidenciaChecklist)
           return {
             ...checklist,
-            checklistItems: checklistItems.filter(isChild),
+            items: items.filter(isChild),
+            finishProcessStatus: { icon: "", message: "" },
           }
         })
       })
@@ -187,7 +430,7 @@ export default {
 @import "node_modules/nord/src/lesscss/nord.less";
 
 .checklists {
-  margin-top: 2rem;
+  margin: 2rem 0;
 }
 
 .grid {
@@ -233,6 +476,7 @@ export default {
       padding: 1rem;
       flex-grow: 1;
       text-align: center;
+      max-width: 300px;
 
       &-title {
         color: @nord4;
@@ -250,10 +494,24 @@ export default {
     li {
       background-color: @nord1;
       margin: 1rem 0;
-      padding: 1rem;
+      padding: 0 1rem 1rem 1rem;
       display: flex;
+      flex-direction: column;
       justify-content: space-between;
       align-items: center;
+
+      .item-description {
+        width: 100%;
+      }
+
+      .item-inputs {
+        width: 100%;
+        display: flex;
+
+        .item-note {
+          flex-grow: 1;
+        }
+      }
 
       div:first-child {
         padding-right: 1rem;
@@ -264,12 +522,12 @@ export default {
       }
 
       select {
-        background-color: @nord9;
         width: 120px;
         cursor: pointer;
-        &:hover {
-          background-color: @nord10;
-        }
+      }
+
+      textarea {
+        min-height: 40px;
       }
     }
   }
