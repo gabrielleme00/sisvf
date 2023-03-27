@@ -260,6 +260,7 @@ export default {
     finishChecklist(checklist) {
       const {
         idPresidenciaChecklist,
+        idVerificacao,
         receitasColetasOfertas,
         ofertasMdoVoluntaria,
         receitasDiversas,
@@ -270,7 +271,7 @@ export default {
       } = checklist
       const data = {
         ID_PRESIDENCIA_CHECKLIST: idPresidenciaChecklist,
-        ID_VERIFICACAO: "D7D363CA-2FE8-4854-B943-14A5E235E560",
+        ID_VERIFICACAO: idVerificacao,
         RECEITAS_COLETAS_OFERTAS: receitasColetasOfertas,
         OFERTAS_MDO_VOLUNTARIA: ofertasMdoVoluntaria,
         RECEITAS_DIVERSAS: receitasDiversas,
@@ -281,10 +282,8 @@ export default {
         STATUS: 0,
       }
       const update = () => {
-        this.updateRecord({ endpoint: "PresidenciaChecklist", data })
+        return this.updateRecord({ endpoint: "PresidenciaChecklist", data })
       }
-      console.log(data)
-      return
       return new Promise((ok, err) =>
         setTimeout(() => update().then(res => ok(res)), 1000)
       )
@@ -302,16 +301,16 @@ export default {
       Promise.all(itemPromises).then(() => {
         setStatus("info", "Itens salvos com sucesso! Salvando checklist...")
         this.finishChecklist(checklist)
-          .catch(error => {
-            setStatus(
-              "danger",
-              `Erro ao tentar finalizar a checklist:  ${error}`
-            )
-          })
           .then(res => {
             setStatus(
               "success",
               "Checklist e seus respectivos itens salvos com sucesso!"
+            )
+          })
+          .catch(error => {
+            setStatus(
+              "danger",
+              `Erro ao tentar finalizar a checklist:  ${error}`
             )
           })
       })
