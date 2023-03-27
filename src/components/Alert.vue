@@ -21,6 +21,7 @@ export default {
         warning: "fa-circle-exclamation",
         success: "fa-circle-check",
         danger: "fa-triangle-exclamation",
+        loading: "fa-spinner",
       }[this.type]
     },
   },
@@ -29,6 +30,15 @@ export default {
 
 <style lang="less" scoped>
 @import "node_modules/nord/src/lesscss/nord.less";
+
+@keyframes rotation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(359deg);
+  }
+}
 
 .alert {
   background-color: @nord1;
@@ -56,6 +66,13 @@ export default {
 
   &.danger {
     color: @nord11;
+  }
+
+  &.loading {
+    color: @nord4;
+    svg {
+      animation: rotation 2s infinite linear;
+    }
   }
 }
 </style>

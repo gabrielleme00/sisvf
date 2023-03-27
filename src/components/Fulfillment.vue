@@ -2,10 +2,11 @@
   <h2>Preenchimento</h2>
   <p>Preenchimento de checklists em aberto e seus respectivos itens.</p>
 
-  <Alert v-if="loading">Carregando...</Alert>
+  <Alert v-if="loading" type="loading">Carregando...</Alert>
   <Alert v-else-if="error" type="danger">
     <b>Houve um erro ao tentar carregar checklists em aberto:</b>
     <p>{{ error }}</p>
+    <p>Tente fazer o login novamente.</p>
   </Alert>
   <Alert v-else-if="!checklists.length" type="success">
     <a href="/dashboard/presidencia-checklist">
@@ -86,7 +87,7 @@
       </button>
       <Alert
         v-if="checklist.finishProcessStatus.message"
-        :icon="checklist.finishProcessStatus.icon"
+        :type="checklist.finishProcessStatus.type"
         >{{ checklist.finishProcessStatus.message }}</Alert
       >
     </div>
@@ -292,14 +293,14 @@ export default {
       return new Promise((ok, err) => setTimeout(ok, index * 1000))
     },
     handleClickFinish(checklist) {
-      const setStatus = (icon, message) => {
-        checklist.finishProcessStatus = { icon, message }
+      const setStatus = (type, message) => {
+        checklist.finishProcessStatus = { type, message }
       }
 
-      setStatus("info", "Salvando itens...")
+      setStatus("loading", "Salvando itens...")
       const itemPromises = checklist.items.map(this.finishChecklistItem)
       Promise.all(itemPromises).then(() => {
-        setStatus("info", "Itens salvos com sucesso! Salvando checklist...")
+        setStatus("loading", "Itens salvos com sucesso! Salvando checklist...")
         this.finishChecklist(checklist)
           .then(res => {
             setStatus(
